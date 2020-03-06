@@ -13,6 +13,15 @@ It is written in Express.js and React.js with Semantic UI.
 
 #### Both backend and frontend is included in this repo, you may reach them under packages directory.
 
+
+![Screenshot](/images/browse.png)
+
+
+![Screenshot](/images/offer.png)
+
+
+
+
 ## Installation
 
 Step 1, clone this repo
