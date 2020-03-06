@@ -29,7 +29,7 @@ It is written in Express.js and React.js with Semantic UI.
 
 Step 1, clone this repo
 
-Step 2, add the **_.env_** file in **server** directory with environment settings:
+Step 2, add the **_.env_** file in **backend** directory with environment settings:
 
 ```
 tokenSecret=REPLACE_THIS_WITH_ANY_LONG_RANDOM_STRING
