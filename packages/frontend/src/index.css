@@ -1,0 +1,41 @@
+.ui.modal {
+    position: relative !important;
+}
+
+.stickyContainer {
+    width: 85% !important;
+    margin-top: 6em !important;
+}
+
+.stickySideBar {
+    position: fixed;
+    z-index: 101;
+}
+
+.stickyMenu{
+    position: fixed;
+    top: 0;
+    width: 85%;
+    z-index: 101;
+}
+
+.normalMenu{
+    top: 0;
+    margin-top: -6em !important;
+    margin-bottom: 1em !important;
+    z-index: 101;
+}
+.ui.card>:last-child, .ui.cards>.card>:last-child{
+    margin-top: 0;
+}
+
+.oku{
+    width: 98%;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    max-height: 17px;
+    line-height: 18px;
+}
