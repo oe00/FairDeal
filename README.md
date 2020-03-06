@@ -20,6 +20,9 @@ It is written in Express.js and React.js with Semantic UI.
 ![Screenshot](/images/offer.png)
 
 
+![Screenshot](/images/offerdetail.png)
+
+
 
 
 ## Installation
