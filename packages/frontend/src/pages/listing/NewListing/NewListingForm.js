@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import config from '../../../config';
-import {Form, Button, Message, Icon, Card, Segment, Divider, Image, Pagination, Grid, Menu} from "semantic-ui-react";
+import {Button, Card, Divider, Form, Icon, Image, Message, Pagination} from "semantic-ui-react";
 import jwt from "jsonwebtoken";
 
 const ListingForm = props => {

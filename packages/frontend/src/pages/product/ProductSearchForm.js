@@ -1,16 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Formik, Form } from 'formik';
+import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import { Button, Row, Col, Table, Input } from 'reactstrap';
-import { withRouter } from 'react-router-dom';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {Button, Col, Input, Row, Table} from 'reactstrap';
 import numeral from 'numeral';
-import { selectOrderProduct, addOrderProduct } from '../../modules/order';
-import { searchProducts, clearSearchProducts } from '../../modules/product';
-import { FormContext } from '../contexts';
+import {FormContext} from '../contexts';
 import config from '../../config';
 
 const searchValidation = Yup.object().shape({

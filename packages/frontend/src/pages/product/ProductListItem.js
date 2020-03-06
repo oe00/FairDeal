@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Badge } from 'reactstrap';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import {Badge, Button} from 'reactstrap';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import numeral from 'numeral';
 
 const ProductListItem = props => {

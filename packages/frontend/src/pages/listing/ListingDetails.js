@@ -1,20 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
-import {
-    Button,
-    Card,
-    Grid,
-    Image,
-    Input,
-    Pagination,
-    Radio,
-    Segment,
-    Form,
-    Icon,
-    Modal,
-    Header, Label, Divider
-} from "semantic-ui-react";
+import {Button, Grid, Header} from "semantic-ui-react";
 import axios from "axios";
 import config from "../../config";
 import Loading from "../../components/Loading";

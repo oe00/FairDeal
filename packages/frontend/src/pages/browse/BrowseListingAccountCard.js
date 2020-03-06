@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link, withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {Card, Header, Image, Modal, Segment} from "semantic-ui-react";
 import axios from "axios";
 import config from "../../config";

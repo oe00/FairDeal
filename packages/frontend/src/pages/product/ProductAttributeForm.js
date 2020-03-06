@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import React, {useContext, useState} from 'react';
 import PropTypes from 'prop-types';
-import { Formik, Form } from 'formik';
+import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import { Button, Row, Col, Input, FormGroup, Label } from 'reactstrap';
-import numeral from 'numeral';
-import { selectOrderProduct, addOrderProduct } from '../../modules/order';
-import { searchProducts, clearSearchProducts } from '../../modules/product';
-import { FormContext } from '../contexts';
-import config from '../../config';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {Button, Col, FormGroup, Input, Label, Row} from 'reactstrap';
+import {selectOrderProduct} from '../../modules/order';
+import {clearSearchProducts, searchProducts} from '../../modules/product';
+import {FormContext} from '../contexts';
 
 const productAttrValidation = Yup.object().shape({
   attributeName: Yup.string().required('Required'),

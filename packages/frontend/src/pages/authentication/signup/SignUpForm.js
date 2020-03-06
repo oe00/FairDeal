@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import config from '../../../config';
-import {Form, Button, Message, Icon} from "semantic-ui-react";
+import {Button, Form, Icon, Message} from "semantic-ui-react";
 
 const SignUpForm = () => {
 

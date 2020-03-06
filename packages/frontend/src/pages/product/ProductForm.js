@@ -1,36 +1,36 @@
-import React, { useState, useEffect, useContext, Fragment } from 'react';
+import React, {Fragment, useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { Formik, Form } from 'formik';
+import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import { MdSave, MdAddCircleOutline } from 'react-icons/md';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {MdAddCircleOutline, MdSave} from 'react-icons/md';
 import {
-  Col,
-  Row,
+  Alert,
+  Button,
   Card,
-  CardHeader,
   CardBody,
+  CardHeader,
+  Col,
   FormGroup,
-  Label,
   Input,
   InputGroup,
-  Button,
-  Alert,
+  Label,
+  Modal,
+  ModalBody,
+  ModalHeader,
   Nav,
-  TabContent,
   NavItem,
   NavLink,
-  TabPane,
+  Row,
+  TabContent,
   Table,
-  Modal,
-  ModalHeader,
-  ModalBody,
+  TabPane,
 } from 'reactstrap';
 import classnames from 'classnames';
 import ProductAttributeForm from './ProductAttributeForm';
 import ProductAttributeListItem from './ProductAttributeListItem';
-import { FormContext } from '../contexts';
+import {FormContext} from '../contexts';
 import config from '../../config';
 
 const { mediaFileDomain, saveMediaFileLocal } = config;

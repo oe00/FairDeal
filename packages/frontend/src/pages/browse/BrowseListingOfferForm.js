@@ -1,17 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {withRouter} from 'react-router-dom';
-import {
-    Button,
-    Segment,
-    Form,
-    Tab,
-    Icon,
-    Header, Message, Container
-} from "semantic-ui-react";
+import {Button, Container, Form, Header, Icon, Message, Segment, Tab} from "semantic-ui-react";
 import axios from "axios";
 import config from "../../config";
-import Loading from "../../components/Loading";
-import Login from "../authentication/login/Login";
 import jwt from "jsonwebtoken";
 
 

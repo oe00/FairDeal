@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Button, Grid, Image, Modal, Card, Label, Icon, Header, Segment, Container} from "semantic-ui-react";
+import React from "react";
+import {Button, Card, Grid, Header, Image, Modal} from "semantic-ui-react";
 import BrowseItemDetails from "./BrowseListingDetails";
 import config from "../../config";
 

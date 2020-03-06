@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import {
-  Table,
-  Col,
-  Button,
-  Breadcrumb,
-  BreadcrumbItem,
-  InputGroup,
-  Input,
-  InputGroupAddon,
-} from 'reactstrap';
-import { withRouter } from 'react-router-dom';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import { MdAddCircleOutline, MdSearch } from 'react-icons/md';
+import {Breadcrumb, BreadcrumbItem, Button, Col, Input, InputGroup, InputGroupAddon, Table,} from 'reactstrap';
+import {withRouter} from 'react-router-dom';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {MdAddCircleOutline, MdSearch} from 'react-icons/md';
 import ReactPaginate from 'react-paginate';
 import jwt from 'jsonwebtoken';
 import ProductListItem from './ProductListItem';

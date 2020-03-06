@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {withRouter} from 'react-router-dom';
 import {Card, Grid} from "semantic-ui-react";
 import BrowseListingAccountCard from "./BrowseListingAccountCard";

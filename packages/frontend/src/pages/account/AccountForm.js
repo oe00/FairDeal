@@ -1,8 +1,8 @@
-import React, {useState,useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import config from '../../config';
-import {Form, Button, Message, Icon, Card, Segment, Divider, Image, Pagination} from "semantic-ui-react";
+import {Button, Card, Divider, Form, Icon, Message} from "semantic-ui-react";
 
 const AccountForm = props => {
 

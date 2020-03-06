@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {withRouter} from 'react-router-dom';
-import {Accordion, Button, Container, Form, Grid, Header, Icon, Message, Segment, Tab, Table} from "semantic-ui-react";
+import {Container, Header, Icon, Message, Segment, Tab} from "semantic-ui-react";
 import jwt from "jsonwebtoken";
 import config from "../../config";
 import axios from "axios";
 import Loading from "../../components/Loading";
-import BrowseListingDetails from "../browse/BrowseListingDetails";
 import ListingDetails from "./ListingDetails";
 
 const Listing = props => {

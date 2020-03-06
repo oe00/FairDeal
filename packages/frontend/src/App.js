@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom';
 import Navigation from './components/Navigation';
 import {Container} from "semantic-ui-react";
@@ -41,6 +41,7 @@ const App = () => {
     const signed = localStorage.getItem(config.accessTokenKey);
 
     const canView = window.location.pathname.toString().includes("browse");
+
 
     return (
         <Router>
