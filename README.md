@@ -25,13 +25,6 @@ dbHost=MYSQL_SERVER_CONNECTION_STRING
 dbUser=MYSQL_USER
 dbPassword=MYSQL_USER_PASSWORD
 dbName=MYSQL_DATABASE_NAME
-testDbName=MYSQL_DATABASE_NAME_FOR_INTEGRATION_TEST
-sendgridApiKey=SENDGRID_API_KEY
-sendgridDailyLimit=SENDGRID_DAILY_LIMIT_FOR_FREETIER
-elasticemailApiKey=ELASTICEMAIL_API_KEY
-elasticemailDailyLimit=ELASTICEMAIL_DAILY_LIMIT_FOR_FREETIER
-passwordCallbackUrl=https://www.example.com
-senderEmail=SYSTEM_EMAIL_SENDER_EMAIL
 ```
 
 Step 3, install all dependencies for ExpressJS
@@ -52,15 +45,8 @@ Step 5, create your own config.js in **frontend/src** directory with following s
 const config = {
   apiDomain: "API_DOMAIN",
   accessTokenKey: "THE_KEY_FOR_LOCAL_STORAGE_TO_STORE_ACCESS_TOKEN",
-  googleApiKey: "GOOGLE_API_KEY",
   mediaFileDomain: "http://localhost:8080", //If you allow images to be uploaded to your local server
   saveMediaFileLocal: false, //Set this to true if you allow images to be uploaded to your local server
-  sendgridApiKey: "SENDGRID_API_KEY",
-  sendgridDailyLimit: "SENDGRID_DAILY_LIMIT_FOR_FREETIER",
-  elasticemailApiKey: "ELASTICEMAIL_API_KEY",
-  elasticemailDailyLimit: "ELASTICEMAIL_DAILY_LIMIT_FOR_FREETIER",
-  passwordCallbackUrl: "https://www.example.com",
-  senderEmail: "SYSTEM_EMAIL_SENDER_EMAIL"
 };
 
 export default config;
@@ -71,13 +57,13 @@ Step 6, set up database
 Before run the following command, make sure you already created a database and have it configured in your **.env** file.
 
 ```console
-cd server && yarn db:migrate
+cd packages/backend && yarn db:migrate
 ```
 
 ## How to run this?
 
 ```console
-cd client && yarn start
+cd packages/frontend && yarn start
 ```
 
 ## Unit Test
@@ -85,12 +71,6 @@ cd client && yarn start
 For every main directory (components, containers etc.), there should be a \_\_tests\_\_ directory for all unit test cases.
 
 ```console
-cd clint && yarn test [test_directory]
-cd server && yarn test [test_directory]
-```
-
-For styling below command should be used.
-
-```console
-yarn lint:client
+cd packages/frontend && yarn test [test_directory]
+cd packages/backend && yarn test [test_directory]
 ```
