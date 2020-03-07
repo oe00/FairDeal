@@ -39,7 +39,7 @@ const NewListingView = props => {
     return (
         account ?
             <Card>
-                <Image src={`https://robohash.org/${account.name}.png`}/>
+                <Image src={`https://robohash.org/${account.code}.png`}/>
                 <Segment.Group>
                     <Segment>
                         <h3>{account.name}</h3>
