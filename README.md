@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/MySQL-5.7.+-blue.svg">
 </p>
 
-FairDeal is an open source e-Commerce application which emphasises on swapping / exchanging.
+FairDeal is an open-source e-Commerce application which emphasizes on swapping/exchanging.
 It is written in Express.js and React.js with Semantic UI.
 
 #### Both backend and frontend is included in this repo, you may reach them under packages directory.
