@@ -30,8 +30,9 @@ const Browse = props => {
         fetchBrowseListings();
     }, []);
 
+
     return (
-        <Grid columns={2}>
+        <Grid>
             <Grid.Column width={3}>
                 <SideBar/>
             </Grid.Column>

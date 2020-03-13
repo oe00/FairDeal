@@ -48,8 +48,8 @@ const App = () => {
             <Container className="stickyContainer">
                 <Navigation/>
                 <Route path="/" exact component={() => <Redirect to="/browse"/>}/>
-                <Route path="/browse" exact component={Browse}/>
-                <Route path="/browse/:id" exact component={BrowseItemDetails}/>
+                <Route path="/browse" exact component={() => <Browse/>}/>
+                <Route path="/browse/:id" exact component={() => <BrowseItemDetails/>}/>
 
                 {signed ? routes.map((route, index) => (
                     <Route
@@ -58,7 +58,7 @@ const App = () => {
                         exact={route.exact}
                         component={route.component}
                     />
-                )) : canView ? null : <Redirect to="/"/>}
+                )) : canView ? null : <Redirect to="/browse"/>}
 
             </Container>
         </Router>);

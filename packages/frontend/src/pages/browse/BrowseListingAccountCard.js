@@ -26,9 +26,8 @@ const BrowseListingAccountCard = props => {
             }
         }
 
-        fetchListingOwnerData()
+        fetchListingOwnerData();
     }, []);
-
 
     return (
         listingOwner ?

@@ -12,6 +12,7 @@ const authMiddleware = async (req, res, next) => {
         if (!req.headers.authorization) {
             throw new UnauthorisedError('Unauthorised request.');
         }
+
         const auth = new OAuth2Request();
         const res = await auth.validateToken(
             req.headers.authorization

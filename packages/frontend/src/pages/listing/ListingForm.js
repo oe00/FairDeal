@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import config from '../../config';
-import {Button, Card, Divider, Form, Icon, Image, Message, Modal} from "semantic-ui-react";
+import {Button, Card, Divider, Form, Icon, Image, Message, Modal, Segment} from "semantic-ui-react";
 import jwt from "jsonwebtoken";
 
 const ListingForm = props => {
@@ -12,7 +12,9 @@ const ListingForm = props => {
         data: {code},
     } = jwt.decode(localStorage.getItem(config.accessTokenKey));
 
-    const {listing: {listing_data, category_data}} = props;
+
+    const [listing, setListing] = useState(props.listing);
+    const [activeCardImage, setActiveCardImage] = useState(props.listing.listing_data.cardImageUrl);
 
 
     const [images, setImages] = useState(null);
@@ -54,28 +56,75 @@ const ListingForm = props => {
         setValue5(event.target.value);
     };
 
+    const changeCardImage = async (image_source) => {
+        try {
+            const res = await axios({
+                method: 'post',
+                url: `${config.apiDomain}/listing/${listing.listing_data.code}/setCardImage/`,
+                data: {image_source},
+                headers: {
+                    authorization: localStorage.getItem(config.accessTokenKey)
+                }
+            });
+
+            const data = res.data;
+
+            setActiveCardImage(image_source);
+
+
+        } catch (e) {
+            //setErrorCardImageUpdate(true);
+        }
+    };
+
+
+    const deleteListingImage = async (image_source,index) => {
+        try {
+            const res = await axios({
+                method: "delete",
+                url: `${config.apiDomain}/listing/${listing.listing_data.code}/delete-image/${image_source}`,
+                headers: {
+                    authorization: localStorage.getItem(config.accessTokenKey),
+                }
+            });
+
+                const new_images = [...images];
+                new_images.splice(index,1);
+
+                setImages(new_images);
+
+
+        } catch (e) {
+            setLoading(false);
+            setError(true);
+
+            setTimeout(() => {
+                setError(false);
+            }, 2500);
+        }
+    };
+
     useEffect(() => {
 
         async function fetchListingImages() {
             try {
                 const res = await axios({
                     method: 'get',
-                    url: `${config.apiDomain}/listing/get-image/${listing_data.code}`,
+                    url: `${config.apiDomain}/listing/get-image/${listing.listing_data.code}`,
                 });
 
                 const data = res.data;
 
                 if (!data) {
-                    //setEmptyActiveListings(true);
+                    //setEmptyImages(true);
                 }
                 setImages(data);
             } catch (e) {
-
-                //setErrorActiveListings(true);
+                //setErrorImages(true);
             }
         }
 
-        fetchListingImages()
+        fetchListingImages();
     }, []);
 
     async function uploadListingImage(file) {
@@ -85,13 +134,26 @@ const ListingForm = props => {
 
             const res = await axios({
                 method: "post",
-                url: `${config.apiDomain}/upload/account/${code}/listing/${listing_data.code}`,
+                url: `${config.apiDomain}/upload/account/${code}/listing/${listing.listing_data.code}`,
                 data: formData,
                 headers: {
                     authorization: localStorage.getItem(config.accessTokenKey),
                     'content-type': 'multipart/form-data',
                 },
             });
+
+            const res2 = await axios({
+                method: 'get',
+                url: `${config.apiDomain}/listing/get-image/${listing.listing_data.code}`,
+            });
+
+            const data = res2.data;
+
+            if (!data) {
+                //setEmptyImages(true);
+            }
+            setImages(data);
+
         } catch (e) {
         }
     }
@@ -101,7 +163,7 @@ const ListingForm = props => {
 
             const res = await axios({
                 method: "put",
-                url: `${config.apiDomain}/account/${code}`,
+                url: `${config.apiDomain}/listing/${code}`,
                 data: {
                     name: value1,
                     email: value2,
@@ -206,14 +268,30 @@ const ListingForm = props => {
                     <Card fluid>
                         <Card.Content>
                             {images && <Card.Group itemsPerRow={5}>
-                                {images.map(image_source =>
-                                    <Modal closeIcon trigger={
-                                    <Card>
-                                        <Image src={`${config.apiDomain}/image/listing/${listing_data.code}/${image_source}`}/>
-                                    </Card>}><Modal.Content>
-                                        <Image size="large" src={`${config.apiDomain}/image/listing/${listing_data.code}/${image_source}`}/>
-                                    </Modal.Content>
-                                    </Modal>
+                                {images.map((image_source,index) =>
+                                    <Card fluid>
+                                        <Modal closeIcon trigger={
+                                            <Image
+                                                src={`${config.apiDomain}/image/listing/${listing.listing_data.code}/${image_source}`}/>
+                                        }>
+                                            <Modal.Content>
+                                                <Image size="large"
+                                                       src={`${config.apiDomain}/image/listing/${listing.listing_data.code}/${image_source}`}/>
+                                            </Modal.Content>
+                                        </Modal>
+                                        <Button.Group vertical>
+                                            <Button disabled={image_source === activeCardImage} fluid
+                                                    primary
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        changeCardImage(image_source);
+                                                    }}>Make Card Image</Button>
+                                            <Button fluid negative onClick={(e) => {
+                                                e.preventDefault();
+                                                deleteListingImage(image_source,index);
+                                            }}>Delete </Button>
+                                        </Button.Group>
+                                    </Card>
                                 )}
                             </Card.Group>}
                         </Card.Content>

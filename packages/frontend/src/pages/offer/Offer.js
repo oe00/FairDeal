@@ -85,7 +85,7 @@ const Offer = () => {
 
         fetchReceivedOffers();
         fetchSentOffers();
-    }, []);
+    }, [code]);
 
     const panes = [
         {

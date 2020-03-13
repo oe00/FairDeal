@@ -110,7 +110,6 @@ Listing.prototype.get = function (code) {
     });
 };
 
-
 Listing.prototype.addPicture = function (code, image) {
     return new Promise((resolve, reject) => {
             let sql = `insert listing_image (imageURL,listingCode) values('${image}','${code}')`;
@@ -127,7 +126,21 @@ Listing.prototype.addPicture = function (code, image) {
     );
 };
 
+Listing.prototype.updateCardImage = function (code, image) {
+    return new Promise((resolve, reject) => {
+            let sql = `update listing set cardImageURL='${image}' where code='${code}'`;
 
+            (this.db || db).query(sql, (error, results) => {
+                    if (error || results.affectedRows == 0) {
+                        reject(new BadRequestError('Invalid image or listing data.'));
+                    } else {
+                        resolve("Card Image Updated.");
+                    }
+                }
+            )
+        }
+    );
+};
 
 Listing.prototype.getAll = function (page = 1, pageSize = 20, search = null) {
     return new Promise((resolve, reject) => {
@@ -391,16 +404,16 @@ Listing.prototype.update = function (listing) {
     });
 };
 
-Listing.prototype.delete = function (code) {
+Listing.prototype.deleteImage = function (listingCode,imageURL) {
     return new Promise((resolve, reject) => {
         (this.db || db).query(
-            `update listing set status=0 where code='${code}'`,
+            `delete from listing_image where imageURL='${imageURL}' and listingCode='${listingCode}'`,
             (error, results) => {
 
-                if (error || results.affectedRows == 0) {
-                    reject(new BadRequestError('Archiving product failed.'));
+                if (error) {
+                    reject(new BadRequestError('Image deletion failed.'));
                 } else {
-                    resolve('Listing archived.');
+                    resolve('Image deleted.');
                 }
             }
         );

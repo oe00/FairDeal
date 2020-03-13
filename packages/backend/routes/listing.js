@@ -102,12 +102,13 @@ router.patch(
 );
 
 router.delete(
-    'listing/:code',
-    [authMiddleware, storeIdVerifier],
+    '/listing/:listingCode/delete-image/:imageCode',
+    authMiddleware,
     async (req, res) => {
         try {
             const listing = new Listing();
-            const data = await listing.delete(req.params.code);
+
+            const data = await listing.deleteImage(req.params.listingCode,req.params.imageCode);
 
             res.send(data);
         } catch (err) {
@@ -141,7 +142,6 @@ router.get(
                 data = false;
             res.send(data);
         } catch (err) {
-            console.log({err})
             res.status(err.statusCode).send(err);
         }
     }
@@ -209,6 +209,43 @@ router.get(
         }
     }
 );
+
+router.post(
+    '/listing/:listingCode/setCardImage',
+    [authMiddleware],
+    async (req, res) => {
+        try {
+            const {image_source} = req.body;
+
+            let listing = new Listing();
+            const data = await listing.updateCardImage(req.params.listingCode,image_source);
+
+            res.send(data);
+        } catch (err) {
+            res.status(err.statusCode).send(err);
+        }
+    }
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ *
+ *
+ *
+ *
+ *
+ * **/
 
 router.post(
     '/stores/:storeId/products',

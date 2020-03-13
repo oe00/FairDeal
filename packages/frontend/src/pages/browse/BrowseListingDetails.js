@@ -125,7 +125,7 @@ const BrowseListingDetails = props => {
                                                 ellipsisItem={null}
                                                 firstItem={null}
                                                 lastItem={null}
-                                                totalPages={5}
+                                                totalPages={images.length}
                                                 style={{justifyContent: "center"}}
                                                 onPageChange={onChange}/></>
                                 : <Loading size={100}/>}
