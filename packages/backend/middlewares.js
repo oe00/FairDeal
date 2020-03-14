@@ -32,9 +32,12 @@ const userCodeVerifier = (req, res, next) => {
             tokenSecret
         );
 
-        if (!decoded || decoded.data.code !== req.params.code) {
+        const code = req.params.code ? req.params.code : req.headers['account-code'];
+
+        if (!decoded || (decoded.data.code !== code)) {
             throw new UnauthorisedError('Invalid user ID.');
         }
+
         res.locals.auth = decoded.data;
         next();
     } catch (err) {

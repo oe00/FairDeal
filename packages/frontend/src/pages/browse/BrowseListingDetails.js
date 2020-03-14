@@ -54,7 +54,7 @@ const BrowseListingDetails = props => {
 
                 const res = await axios({
                     method: 'get',
-                    url: `${config.apiDomain}/listing/get-image/${id ? id : passed_listing_code ? passed_listing_code : listing.listing_data.code }`,
+                    url: `${config.apiDomain}/listing/${id ? id : passed_listing_code ? passed_listing_code : listing.listing_data.code }/get-images`,
                 });
 
                 const data = res.data;
@@ -118,7 +118,7 @@ const BrowseListingDetails = props => {
                                                    ribbon: true,
                                                    size: (quickLook ? "small" : "large")
                                                }}
-                                               src={`${config.apiDomain}/image/listing/${listing.listing_data.code}/${images[activePage-1]}`}/>
+                                               src={`${config.apiDomain}/listing/${listing.listing_data.code}/get-image/${images[activePage-1]}`}/>
                                     <Pagination boundaryRange={0}
                                                 activePage={activePage}
                                                 siblingRange={1}

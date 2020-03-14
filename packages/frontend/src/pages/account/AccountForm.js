@@ -85,7 +85,7 @@ const AccountForm = props => {
 
             const res = await axios({
                 method: "post",
-                url: `${config.apiDomain}/upload/account/${code}`,
+                url: `${config.apiDomain}/account/${code}/upload-image`,
                 data: formData,
                 headers: {
                     authorization: localStorage.getItem(config.accessTokenKey),

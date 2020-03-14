@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
-import {Button, Grid, Header} from "semantic-ui-react";
+import {Button, Grid, Header, Icon, Message, Tab} from "semantic-ui-react";
 import axios from "axios";
 import config from "../../config";
 import Loading from "../../components/Loading";
 import jwt from "jsonwebtoken";
 import ListingForm from "./ListingForm";
+import ListingImage from "./ListingImage";
 
 const ListingDetails = props => {
 
@@ -16,8 +17,17 @@ const ListingDetails = props => {
 
     const [listing, setListing] = useState(passed_listing);
 
-    const [listingPicture, setListingPicture] = useState(listing ? `https://robohash.org/${listing.listing_data.name}.png`
-        : `https://robohash.org/${"id"}.png`);
+    const panes = [
+        {
+            menuItem: "Listing Details",
+            render: () => <ListingForm listing={listing}/>
+        },
+        {
+            menuItem: "Listing Images",
+            render: () => <ListingImage listing={listing}/>
+        },
+
+    ];
 
 
     useEffect(() => {
@@ -58,7 +68,7 @@ const ListingDetails = props => {
                 </Grid>
                 <Grid columns={1}>
                     <Grid.Column>
-                        <ListingForm listing={listing}/>
+                        <Tab menu={{attached: false, widths: 2}} panes={panes}/>
                     </Grid.Column>
                 </Grid>
             </div>

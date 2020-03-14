@@ -7,6 +7,7 @@ require('dotenv').load();
 const {authMiddleware, storeIdVerifier, userCodeVerifier} = require('../middlewares');
 const {Listing, Category} = require('../models');
 const {UnauthorisedError} = require('../exceptions');
+const fs = require('fs');
 
 router.get(
     '/listing/get/:code',
@@ -28,7 +29,7 @@ router.get(
 );
 
 router.get(
-    '/listing/get-image/:code',
+    '/listing/:code/get-images',
     async function (req, res) {
         try {
             const listingCode = req.params.code;
@@ -103,12 +104,14 @@ router.patch(
 
 router.delete(
     '/listing/:listingCode/delete-image/:imageCode',
-    authMiddleware,
+    [authMiddleware,userCodeVerifier],
     async (req, res) => {
         try {
             const listing = new Listing();
 
             const data = await listing.deleteImage(req.params.listingCode,req.params.imageCode);
+
+            fs.unlinkSync(`uploads/accounts/${req.headers['account-code']}/listings/${req.params.listingCode}/${req.params.imageCode}`);
 
             res.send(data);
         } catch (err) {
@@ -211,8 +214,8 @@ router.get(
 );
 
 router.post(
-    '/listing/:listingCode/setCardImage',
-    [authMiddleware],
+    '/listing/:listingCode/set-card-image',
+    [authMiddleware,userCodeVerifier],
     async (req, res) => {
         try {
             const {image_source} = req.body;

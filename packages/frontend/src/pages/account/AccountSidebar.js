@@ -39,7 +39,7 @@ const AccountSidebar = props => {
     return (
         account ?
             <Card>
-                <Image src={`${config.apiDomain}/image/account/${code}`}/>
+                <Image src={`${config.apiDomain}/account/${code}/get-image`}/>
                 <Segment.Group>
                     <Segment>
                         <h3>{account.name}</h3>

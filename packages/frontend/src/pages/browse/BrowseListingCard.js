@@ -19,7 +19,7 @@ function BrowseListingCard(props) {
                                   ribbon: true,
                                   size: "small",
                               }}
-                              src={`${config.apiDomain}/image/card/listing/${item.listing_data.code}`}/>
+                              src={`${config.apiDomain}/listing/${item.listing_data.code}/get-card-image`}/>
                        <Card.Content extra>
                            <Header className="oku" size="small">{item.listing_data.name}</Header>
                        </Card.Content>

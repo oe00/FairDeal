@@ -20,8 +20,6 @@ const {
 const {
     Public,
 } = require('../models');
-const {BadRequestError} = require('../exceptions');
-
 const {
     senderEmail,
     sendgridApiKey,
@@ -33,7 +31,7 @@ const {
 
 const listingStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const dir = `uploads/accounts/${req.params.code}/listings/${req.params.listingCode}/`;
+        const dir = `uploads/accounts/${req.headers['account-code']}/listings/${req.params.listingCode}/`;
         mkdirp(dir, err => cb(err, dir));
 
     },
@@ -82,7 +80,7 @@ const accountUpload = multer({
     },
 }).single('image');
 
-router.post('/upload/account/:code/listing/:listingCode', [authMiddleware,userCodeVerifier], listingUpload, async (req, res) => {
+router.post('/listing/:listingCode/upload-image', [authMiddleware,userCodeVerifier], listingUpload, async (req, res) => {
 
     try {
         const {filename: image, destination: destination} = req.file;
@@ -104,7 +102,7 @@ router.post('/upload/account/:code/listing/:listingCode', [authMiddleware,userCo
 
 });
 
-router.post('/upload/account/:code/', [authMiddleware, userCodeVerifier], accountUpload, async (req, res) => {
+router.post('/account/:code/upload-image', [authMiddleware, userCodeVerifier], accountUpload, async (req, res) => {
 
     try {
         const {filename: image, destination: destination} = req.file;
@@ -139,7 +137,7 @@ router.post('/upload/account/:code/', [authMiddleware, userCodeVerifier], accoun
 });
 
 router.get(
-    '/image/account/:code',
+    '/account/:code/get-image',
     async function (req, res) {
         try {
 
@@ -161,7 +159,7 @@ router.get(
     });
 
 router.get(
-    '/image/listing/:listingCode/:imageName',
+    '/listing/:listingCode/get-image/:imageName',
     async function (req, res) {
         try {
 
@@ -182,7 +180,7 @@ router.get(
     });
 
 router.get(
-    '/image/card/listing/:listingCode',
+    '/listing/:listingCode/get-card-image',
     async function (req, res) {
         try {
 

@@ -39,3 +39,11 @@
     max-height: 17px;
     line-height: 18px;
 }
+
+.customDisabled{
+    cursor: default;
+    opacity: .45!important;
+    background-image: none!important;
+    box-shadow: none!important;
+    pointer-events: none!important;
+}
