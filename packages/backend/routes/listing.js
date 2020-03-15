@@ -1,7 +1,7 @@
 'use strict';
 
 const router = require('express').Router();
-const shortid = require('shortid');
+const uniqid = require('uniqid');
 const moment = require('moment');
 require('dotenv').load();
 const {authMiddleware, storeIdVerifier, userCodeVerifier} = require('../middlewares');
@@ -158,7 +158,7 @@ router.get(
             const listing = new Listing();
             const category = new Category();
 
-            const listings = await listing.getAllActiveListings(req.params.code,
+            const listings = await listing.getAllUserActiveListings(req.params.code,
                 req.query.page || 1,
                 req.query.size || 20,
                 req.query.q || null
@@ -190,7 +190,7 @@ router.get(
             const listing = new Listing();
             const category = new Category();
 
-            const listings = await listing.getAllPassiveListings(req.params.code,
+            const listings = await listing.getAllUserPassiveListings(req.params.code,
                 req.query.page || 1,
                 req.query.size || 20,
                 req.query.q || null
@@ -222,6 +222,74 @@ router.post(
 
             let listing = new Listing();
             const data = await listing.updateCardImage(req.params.listingCode,image_source);
+
+            res.send(data);
+        } catch (err) {
+            res.status(err.statusCode).send(err);
+        }
+    }
+);
+
+router.post(
+    '/listing/new-listing',
+    [authMiddleware,userCodeVerifier],
+    async (req,res) => {
+        try{
+
+            const {
+                name,
+                askingPrice,
+                listingCondition,
+                description,
+                categoryCode
+            } = req.body;
+
+            const listing = new Listing();
+
+            const data = await listing.add(new Listing(
+                uniqid(),
+                name,
+                askingPrice,
+                "ni.svg",
+                listingCondition,
+                description,
+                categoryCode,
+                req.headers['account-code'],
+                moment.utc().format('YYYY-MM-DD HH:mm:ss'),
+                "0"
+            ));
+
+            res.send(data);
+
+        }
+        catch (err) {
+            res.status(err.statusCode).send(err);
+        }
+    }
+);
+
+router.patch(
+    '/listing/:listingCode/set-active',
+    [authMiddleware, userCodeVerifier],
+    async (req, res) => {
+        try {
+            const listing = new Listing();
+            const data = await listing.activate(req.params.listingCode);
+
+            res.send(data);
+        } catch (err) {
+            res.status(err.statusCode).send(err);
+        }
+    }
+);
+
+router.patch(
+    '/listing/:listingCode/set-passive',
+    [authMiddleware, userCodeVerifier],
+    async (req, res) => {
+        try {
+            const listing = new Listing();
+            const data = await listing.passive(req.params.listingCode);
 
             res.send(data);
         } catch (err) {

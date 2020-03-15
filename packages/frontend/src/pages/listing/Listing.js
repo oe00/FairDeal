@@ -96,7 +96,7 @@ const Listing = props => {
                                 return ({
                                     menuItem: `${listing.listing_data.name}`,
                                     render: () =>
-                                        <Tab.Pane key={index}>
+                                        <Tab.Pane key={"active-"+index}>
                                             <ListingDetails passed_listing={listing}/>
                                         </Tab.Pane>
                                 })
@@ -123,7 +123,7 @@ const Listing = props => {
                                 return ({
                                     menuItem: `${listing.listing_data.name}`,
                                     render: () =>
-                                        <Tab.Pane key={index}>
+                                        <Tab.Pane key={"passive-"+index}>
                                             <ListingDetails passed_listing={listing}/>
                                         </Tab.Pane>
                                 })

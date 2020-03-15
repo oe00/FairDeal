@@ -19,6 +19,7 @@ const BrowseListingDetails = props => {
     } = props;
 
     let accountCode = null;
+
     if (jwt.decode(localStorage.getItem(config.accessTokenKey))) {
         const {
             data: {code},

@@ -31,7 +31,7 @@ function Listing(
     this.askingPrice = askingPrice;
     this.cardImageUrl = cardImageUrl;
     this.listingCondition = listingCondition;
-    this.description = description;
+    this.description = description || "";
     this.categoryCode = categoryCode;
     this.addedBy = addedBy;
     this.addedOn = addedOn || moment.utc().format('YYYY-MM-DD HH:mm:ss');
@@ -195,7 +195,7 @@ Listing.prototype.getAll = function (page = 1, pageSize = 20, search = null) {
     });
 };
 
-Listing.prototype.getAllActiveListings = function (code, page = 1, pageSize = 20, search = null) {
+Listing.prototype.getAllUserActiveListings = function (code, page = 1, pageSize = 20, search = null) {
     return new Promise((resolve, reject) => {
         let sql = `select code, name, askingPrice, cardImageUrl, listingCondition, description, categoryCode, addedOn, addedBy, status
                from listing where status=1 and addedBy='${code}'`;
@@ -244,7 +244,7 @@ Listing.prototype.getAllActiveListings = function (code, page = 1, pageSize = 20
     });
 };
 
-Listing.prototype.getAllPassiveListings = function (code, page = 1, pageSize = 20, search = null) {
+Listing.prototype.getAllUserPassiveListings = function (code, page = 1, pageSize = 20, search = null) {
     return new Promise((resolve, reject) => {
         let sql = `select code, name, askingPrice, cardImageUrl, listingCondition, description, categoryCode, addedOn, addedBy, status
                from listing where status=0 and addedBy='${code}'`;
@@ -322,31 +322,19 @@ Listing.prototype.add = function (listing) {
                 description,
                 categoryCode,
                 addedBy,
-                addedOn
+                addedOn,
+                status
             } = listing;
 
             (this.db || db).query(
                 `insert into listing (code, name, askingPrice, cardImageUrl, listingCondition, description, categoryCode, addedBy, addedOn, status) 
-         values('${code}', '${name}', '${askingPrice}', '${cardImageUrl}', '${listingCondition}', '${description}', ${categoryCode}, ${addedBy}, 
-         '${addedOn}','${1}')`,
+         values('${code}', '${name}', '${askingPrice}', '${cardImageUrl}', '${listingCondition}', "${description}", '${categoryCode}', '${addedBy}', 
+         '${addedOn}','${status}')`,
                 (error, results) => {
                     if (error || results.affectedRows == 0) {
                         reject(new BadRequestError('Invalid listing data.'));
                     } else {
-                        resolve(
-                            new Listing(
-                                code,
-                                name,
-                                askingPrice,
-                                cardImageUrl,
-                                listingCondition,
-                                description,
-                                categoryCode,
-                                addedBy,
-                                moment.utc(addedOn).format('YYYY-MM-DD HH:mm:ss'),
-                                1
-                            )
-                        );
+                        resolve(code);
                     }
                 }
             );
@@ -404,7 +392,7 @@ Listing.prototype.update = function (listing) {
     });
 };
 
-Listing.prototype.deleteImage = function (listingCode,imageURL) {
+Listing.prototype.deleteImage = function (listingCode, imageURL) {
     return new Promise((resolve, reject) => {
         (this.db || db).query(
             `delete from listing_image where imageURL='${imageURL}' and listingCode='${listingCode}'`,
@@ -427,7 +415,7 @@ Listing.prototype.activate = function (code) {
             (error, results) => {
 
                 if (error || results.affectedRows == 0) {
-                    reject(new BadRequestError('Activating product failed.'));
+                    reject(new BadRequestError('Making listing active failed.'));
                 } else {
                     resolve('Listing activated.');
                 }
@@ -435,6 +423,23 @@ Listing.prototype.activate = function (code) {
         );
     });
 };
+
+Listing.prototype.passive = function (code) {
+    return new Promise((resolve, reject) => {
+        (this.db || db).query(
+            `update listing set status=0 where code='${code}'`,
+            (error, results) => {
+
+                if (error || results.affectedRows == 0) {
+                    reject(new BadRequestError('Making listing passive failed.'));
+                } else {
+                    resolve('Listing set to passive.');
+                }
+            }
+        );
+    });
+};
+
 
 function ProductAttribute(
     code,

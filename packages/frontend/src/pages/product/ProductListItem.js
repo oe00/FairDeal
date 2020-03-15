@@ -22,7 +22,7 @@ const ProductListItem = props => {
   return (
     <tr>
       <td>
-        <img src={coverImage || require('../../assets/no_image.svg')} className="thumbnail" />
+        <img src={coverImage || require('../../assets/ni.svg')} className="thumbnail" />
       </td>
       <td>{name}</td>
       <td>{sku}</td>

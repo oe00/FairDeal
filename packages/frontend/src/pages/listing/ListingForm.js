@@ -149,8 +149,6 @@ const ListingForm = props => {
                     <Divider/>
                     <Form.TextArea
                         label="Description"
-                        iconPosition="left"
-                        icon="info"
                         type="text"
                         placeholder="Enter Description"
                         onChange={onChange5}

@@ -12,10 +12,10 @@ import ListingImage from "./ListingImage";
 const ListingDetails = props => {
 
     const {
-        passed_listing,
-    } = props;
+        data: {code},
+    } = jwt.decode(localStorage.getItem(config.accessTokenKey));
 
-    const [listing, setListing] = useState(passed_listing);
+    const [listing, setListing] = useState(props.passed_listing);
 
     const panes = [
         {
@@ -29,14 +29,46 @@ const ListingDetails = props => {
 
     ];
 
+    async function makeListingPassive(){
+        try {
+            const res = await axios({
+                method: 'patch',
+                url: `${config.apiDomain}/listing/${listing.listing_data.code}/set-passive`,
+                headers: {
+                    'account-code': code,
+                    authorization: localStorage.getItem(config.accessTokenKey),
+                }
+            });
+
+            window.location.reload();
+
+        } catch (e) {
+            //setErrorStatus(true);
+        }
+    }
+
+    async function makeListingActive(){
+        try {
+            const res = await axios({
+                method: 'patch',
+                url: `${config.apiDomain}/listing/${listing.listing_data.code}/set-active`,
+                headers: {
+                    'account-code': code,
+                    authorization: localStorage.getItem(config.accessTokenKey),
+                }
+            });
+
+            window.location.reload();
+
+        } catch (e) {
+            //setErrorStatus(true);
+        }
+    }
+
 
     useEffect(() => {
         async function fetchListingData() {
             try {
-
-                const {
-                    data: {code},
-                } = jwt.decode(localStorage.getItem(config.accessTokenKey));
 
                 const res = await axios({
                     method: 'get',
@@ -45,25 +77,25 @@ const ListingDetails = props => {
                 const data = res.data;
                 setListing(data);
             } catch (e) {
-                //TODO: error handling here
+                // setErrorListing();
             }
         }
 
-        if (!passed_listing)
+        if (!listing)
             fetchListingData();
     }, []);
 
     return (
         listing ?
-            <div>
+            <>
                 <Grid columns={2}>
                     <Grid.Column width={12}>
                         <Header size="large">{listing.listing_data.name}</Header>
                     </Grid.Column>
                     <Grid.Column width={4}>
                         {listing.listing_data.status === 1 ?
-                            <Button floated="right" negative>Make Listing Passive!</Button> :
-                            <Button floated="right" positive>Make Listing Active!</Button>}
+                            <Button floated="right" negative onClick={() => makeListingPassive()}>Make Listing Passive!</Button> :
+                            <Button floated="right" positive onClick={() => makeListingActive()}>Make Listing Active!</Button>}
                     </Grid.Column>
                 </Grid>
                 <Grid columns={1}>
@@ -71,7 +103,7 @@ const ListingDetails = props => {
                         <Tab menu={{attached: false, widths: 2}} panes={panes}/>
                     </Grid.Column>
                 </Grid>
-            </div>
+            </>
             : <Loading size={100}/>
     );
 };
