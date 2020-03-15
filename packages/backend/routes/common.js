@@ -91,7 +91,7 @@ router.post('/listing/:listingCode/upload-image', [authMiddleware,userCodeVerifi
 
         const listing = new Listing();
 
-        const data = await listing.addPicture(req.params.listingCode,"-" + image);
+        const data = await listing.addListingImage(req.params.listingCode,"-" + image);
 
         fs.unlinkSync(req.file.path);
 
@@ -169,7 +169,7 @@ router.get(
 
             const listing = new Listing();
 
-            const {addedBy} = await listing.get(listingCode);
+            const {addedBy} = await listing.getListing(listingCode);
 
             res.sendFile(path.join(__dirname, `../uploads/accounts/${addedBy}/listings/${listingCode}/${imageName}`));
 
@@ -188,7 +188,7 @@ router.get(
 
             const listing = new Listing();
 
-            const {addedBy,cardImageUrl} = await listing.get(listingCode);
+            const {addedBy,cardImageUrl} = await listing.getListing(listingCode);
 
             res.sendFile(path.join(__dirname, `../uploads/accounts/${addedBy}/listings/${listingCode}/${cardImageUrl}`));
 

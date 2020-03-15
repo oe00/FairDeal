@@ -54,15 +54,16 @@ const ListingForm = props => {
 
             const res = await axios({
                 method: "put",
-                url: `${config.apiDomain}/listing/${code}`,
+                url: `${config.apiDomain}/listing/${listing.listing_data.code}/update`,
                 data: {
                     name: value1,
-                    email: value2,
-                    password: value3,
-                    city: value4,
-                    oldPassword: value5,
+                    askingPrice: value2,
+                    listingCondition: value3,
+                    categoryCode: value4,
+                    description: value5,
                 },
                 headers: {
+                    'account-code': code,
                     authorization: localStorage.getItem(config.accessTokenKey),
                 }
             });

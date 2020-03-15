@@ -41,34 +41,8 @@ function Listing(
     }
 }
 
-Listing.prototype.getImages = function (code) {
-    return new Promise((resolve, reject) => {
-        (this.db || db).query(
-            `select imageURL
-               from listing_image where listingCode='${code}'`,
-            (error, results) => {
-                if (error || results.length === 0) {
-                    if (error) {
-                        reject(new NoRecordFoundError('No listings image found.'));
-                    } else {
-                        resolve(false);
-                    }
-                } else {
-                    const images = results.map(image => {
-                        const {
-                            imageURL
-                        } = image;
 
-                        return imageURL;
-                    });
-                    resolve(images);
-                }
-            }
-        );
-    });
-};
-
-Listing.prototype.get = function (code) {
+Listing.prototype.getListing = function (code) {
     return new Promise((resolve, reject) => {
         let sql = `select code, name, askingPrice, cardImageUrl, listingCondition, description, categoryCode, addedOn, addedBy, status
                from listing where code='${code}'`;
@@ -110,39 +84,7 @@ Listing.prototype.get = function (code) {
     });
 };
 
-Listing.prototype.addPicture = function (code, image) {
-    return new Promise((resolve, reject) => {
-            let sql = `insert listing_image (imageURL,listingCode) values('${image}','${code}')`;
-
-            (this.db || db).query(sql, (error, results) => {
-                    if (error || results.affectedRows == 0) {
-                        reject(new BadRequestError('Invalid image or listing data.'));
-                    } else {
-                        resolve("Image URL inserted.");
-                    }
-                }
-            )
-        }
-    );
-};
-
-Listing.prototype.updateCardImage = function (code, image) {
-    return new Promise((resolve, reject) => {
-            let sql = `update listing set cardImageURL='${image}' where code='${code}'`;
-
-            (this.db || db).query(sql, (error, results) => {
-                    if (error || results.affectedRows == 0) {
-                        reject(new BadRequestError('Invalid image or listing data.'));
-                    } else {
-                        resolve("Card Image Updated.");
-                    }
-                }
-            )
-        }
-    );
-};
-
-Listing.prototype.getAll = function (page = 1, pageSize = 20, search = null) {
+Listing.prototype.getAllActiveListings = function (page = 1, pageSize = 20, search = null) {
     return new Promise((resolve, reject) => {
         let sql = `select code, name, askingPrice, cardImageUrl, listingCondition, description, categoryCode, addedOn, addedBy, status
                from listing where status=1`;
@@ -293,7 +235,7 @@ Listing.prototype.getAllUserPassiveListings = function (code, page = 1, pageSize
     });
 };
 
-Listing.prototype.add = function (listing) {
+Listing.prototype.addListing = function (listing) {
     let proceed = true;
 
     return new Promise((resolve, reject) => {
@@ -344,45 +286,44 @@ Listing.prototype.add = function (listing) {
     });
 };
 
-Listing.prototype.update = function (listing) {
+Listing.prototype.updateListing = function (listing) {
     return new Promise((resolve, reject) => {
         if (listing instanceof Listing) {
-            const {
-                code,
-                name,
-                askingPrice,
-                cardImageUrl,
-                listingCondition,
-                description,
-                categoryCode,
-                addedBy,
-                addedOn,
-                status
-            } = listing;
+            const {name, askingPrice, categoryCode, description, listingCondition,code} = listing;
+
+            let queryString = "update listing set";
+
+            if (name) {
+                queryString += ` name='${name}',`;
+            }
+
+            if (askingPrice) {
+                queryString += ` askingPrice='${askingPrice}',`;
+            }
+
+            if (categoryCode) {
+                queryString += ` categoryCode='${categoryCode}',`;
+            }
+            if (description) {
+                queryString += ` description='${description}',`;
+            }
+
+            if (listingCondition) {
+                queryString += ` listingCondition='${listingCondition}',`;
+            }
+
+            queryString = queryString.substring(0, queryString.length - 1);
+
+            queryString += ` where code='${code}'`;
+
 
             (this.db || db).query(
-                `update product set name='${name}', category_id='${categoryId}', sku='${sku}', description='${description}', quantity=${quantity}, 
-         allow_quantity=${allowQuantity}, unit_price=${unitPrice}, cost=${cost}, cover_image='${coverImage}', 
-         manufacturer_id='${manufacturerId}', supplier_id='${supplierId}'
-         where code='${code}' and added_by='${addedBy}'`,
+                queryString,
                 (error, results) => {
                     if (error || results.affectedRows == 0) {
                         reject(new BadRequestError('Invalid listing data.'));
                     } else {
-                        resolve(
-                            new Listing(
-                                code,
-                                name,
-                                askingPrice,
-                                cardImageUrl,
-                                listingCondition,
-                                description,
-                                categoryCode,
-                                addedBy,
-                                addedOn,
-                                status
-                            )
-                        );
+                        resolve("Listing update successful.");
                     }
                 }
             );
@@ -392,7 +333,50 @@ Listing.prototype.update = function (listing) {
     });
 };
 
-Listing.prototype.deleteImage = function (listingCode, imageURL) {
+Listing.prototype.getListingImages = function (code) {
+    return new Promise((resolve, reject) => {
+        (this.db || db).query(
+            `select imageURL
+               from listing_image where listingCode='${code}'`,
+            (error, results) => {
+                if (error || results.length === 0) {
+                    if (error) {
+                        reject(new NoRecordFoundError('No listings image found.'));
+                    } else {
+                        resolve(false);
+                    }
+                } else {
+                    const images = results.map(image => {
+                        const {
+                            imageURL
+                        } = image;
+
+                        return imageURL;
+                    });
+                    resolve(images);
+                }
+            }
+        );
+    });
+};
+
+Listing.prototype.addListingImage = function (code, image) {
+    return new Promise((resolve, reject) => {
+            let sql = `insert listing_image (imageURL,listingCode) values('${image}','${code}')`;
+
+            (this.db || db).query(sql, (error, results) => {
+                    if (error || results.affectedRows == 0) {
+                        reject(new BadRequestError('Invalid image or listing data.'));
+                    } else {
+                        resolve("Image URL inserted.");
+                    }
+                }
+            )
+        }
+    );
+};
+
+Listing.prototype.deleteListingImage = function (listingCode, imageURL) {
     return new Promise((resolve, reject) => {
         (this.db || db).query(
             `delete from listing_image where imageURL='${imageURL}' and listingCode='${listingCode}'`,
@@ -408,7 +392,23 @@ Listing.prototype.deleteImage = function (listingCode, imageURL) {
     });
 };
 
-Listing.prototype.activate = function (code) {
+Listing.prototype.updateListingCardImage = function (code, image) {
+    return new Promise((resolve, reject) => {
+            let sql = `update listing set cardImageURL='${image}' where code='${code}'`;
+
+            (this.db || db).query(sql, (error, results) => {
+                    if (error || results.affectedRows == 0) {
+                        reject(new BadRequestError('Invalid image or listing data.'));
+                    } else {
+                        resolve("Card Image Updated.");
+                    }
+                }
+            )
+        }
+    );
+};
+
+Listing.prototype.makeActiveListing = function (code) {
     return new Promise((resolve, reject) => {
         (this.db || db).query(
             `update listing set status=1 where code='${code}'`,
@@ -424,7 +424,7 @@ Listing.prototype.activate = function (code) {
     });
 };
 
-Listing.prototype.passive = function (code) {
+Listing.prototype.makePassiveListing = function (code) {
     return new Promise((resolve, reject) => {
         (this.db || db).query(
             `update listing set status=0 where code='${code}'`,
@@ -441,7 +441,7 @@ Listing.prototype.passive = function (code) {
 };
 
 
-function ProductAttribute(
+function CategoryAttribute(
     code,
     attributeName,
     productId,
@@ -470,7 +470,7 @@ function ProductAttribute(
     }
 }
 
-ProductAttribute.prototype.get = function (id) {
+CategoryAttribute.prototype.get = function (id) {
     return new Promise((resolve, reject) => {
         (this.db || db).query(
             `select code, product_id as productId, pa.name as attributeName, quantity, var_price as varPrice, added_on as addedOn, added_by as addedBy, 
@@ -494,7 +494,7 @@ ProductAttribute.prototype.get = function (id) {
                         status,
                     } = results[0];
                     resolve(
-                        new ProductAttribute(
+                        new CategoryAttribute(
                             code,
                             attributeName,
                             productId,
@@ -513,7 +513,7 @@ ProductAttribute.prototype.get = function (id) {
     });
 };
 
-ProductAttribute.prototype.getAllByProductId = function (id) {
+CategoryAttribute.prototype.getAllByProductId = function (id) {
     return new Promise((resolve, reject) => {
         (this.db || db).query(
             `select code, product_id as productId, pa.name as attributeName, quantity, var_price as varPrice, added_on as addedOn, added_by as addedBy, 
@@ -537,7 +537,7 @@ ProductAttribute.prototype.getAllByProductId = function (id) {
                             productAttributeCategoryName,
                             status,
                         } = attr;
-                        return new ProductAttribute(
+                        return new CategoryAttribute(
                             code,
                             attributeName,
                             productId,
@@ -558,11 +558,11 @@ ProductAttribute.prototype.getAllByProductId = function (id) {
     });
 };
 
-ProductAttribute.prototype.add = function (productAttribute) {
+CategoryAttribute.prototype.add = function (productAttribute) {
     let proceed = true;
 
     return new Promise((resolve, reject) => {
-        if (productAttribute instanceof ProductAttribute) {
+        if (productAttribute instanceof CategoryAttribute) {
             Object.keys(productAttribute).forEach(function (key, index) {
                 if (productAttribute[key] === undefined) {
                     reject(
@@ -597,7 +597,7 @@ ProductAttribute.prototype.add = function (productAttribute) {
                         reject(new BadRequestError('Invalid product attribute data.'));
                     } else {
                         resolve(
-                            new ProductAttribute(
+                            new CategoryAttribute(
                                 code,
                                 attributeName,
                                 productId,
@@ -619,9 +619,9 @@ ProductAttribute.prototype.add = function (productAttribute) {
     });
 };
 
-ProductAttribute.prototype.update = function (productAttribute) {
+CategoryAttribute.prototype.update = function (productAttribute) {
     return new Promise((resolve, reject) => {
-        if (productAttribute instanceof ProductAttribute) {
+        if (productAttribute instanceof CategoryAttribute) {
             const {
                 code,
                 attributeName,
@@ -641,7 +641,7 @@ ProductAttribute.prototype.update = function (productAttribute) {
                         reject(new BadRequestError('Invalid product attribute data.'));
                     } else {
                         resolve(
-                            new ProductAttribute(
+                            new CategoryAttribute(
                                 code,
                                 attributeName,
                                 productId,
@@ -661,37 +661,7 @@ ProductAttribute.prototype.update = function (productAttribute) {
     });
 };
 
-ProductAttribute.prototype.delete = function (code) {
-    return new Promise((resolve, reject) => {
-        (this.db || db).query(
-            `update product_attribute set status=0 where code='${code}'`,
-            (error, results) => {
-                if (error || results.affectedRows == 0) {
-                    reject(new BadRequestError('Archiving product attribute failed.'));
-                } else {
-                    resolve('Listing attribute archived.');
-                }
-            }
-        );
-    });
-};
-
-ProductAttribute.prototype.activate = function (code) {
-    return new Promise((resolve, reject) => {
-        (this.db || db).query(
-            `update product_attribute set status=1 where code='${code}'`,
-            (error, results) => {
-                if (error || results.affectedRows == 0) {
-                    reject(new BadRequestError('Activating product attribute failed.'));
-                } else {
-                    resolve('Listing attribute activated.');
-                }
-            }
-        );
-    });
-};
 
 module.exports = {
-    Listing,
-    ProductAttribute,
+    Listing
 };

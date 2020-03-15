@@ -14,7 +14,7 @@ router.get(
     async (req, res) => {
         try {
             const listing = new Listing();
-            const listing_data = await listing.get(req.params.code);
+            const listing_data = await listing.getListing(req.params.code);
 
             const category = new Category();
             const category_data = await category.get(listing_data.categoryCode);
@@ -34,7 +34,7 @@ router.get(
         try {
             const listingCode = req.params.code;
             const listing = new Listing();
-            const data = await listing.getImages(listingCode);
+            const data = await listing.getListingImages(listingCode);
             res.send(data);
         } catch (err) {
             res.status(err.statusCode).send(err);
@@ -78,7 +78,7 @@ router.put(
                 supplierId
             );
 
-            const data = await listing.update(listing);
+            const data = await listing.updateListing(listing);
 
             res.send(data);
         } catch (err) {
@@ -93,7 +93,7 @@ router.patch(
     async (req, res) => {
         try {
             const listing = new Listing();
-            const data = await listing.activate(req.params.code);
+            const data = await listing.makeActiveListing(req.params.code);
 
             res.send(data);
         } catch (err) {
@@ -109,7 +109,7 @@ router.delete(
         try {
             const listing = new Listing();
 
-            const data = await listing.deleteImage(req.params.listingCode,req.params.imageCode);
+            const data = await listing.deleteListingImage(req.params.listingCode,req.params.imageCode);
 
             fs.unlinkSync(`uploads/accounts/${req.headers['account-code']}/listings/${req.params.listingCode}/${req.params.imageCode}`);
 
@@ -127,7 +127,7 @@ router.get(
             const listing = new Listing();
             const category = new Category();
 
-            const listings = await listing.getAll(
+            const listings = await listing.getAllActiveListings(
                 req.query.page || 1,
                 req.query.size || 20,
                 req.query.q || null
@@ -221,7 +221,7 @@ router.post(
             const {image_source} = req.body;
 
             let listing = new Listing();
-            const data = await listing.updateCardImage(req.params.listingCode,image_source);
+            const data = await listing.updateListingCardImage(req.params.listingCode,image_source);
 
             res.send(data);
         } catch (err) {
@@ -246,7 +246,7 @@ router.post(
 
             const listing = new Listing();
 
-            const data = await listing.add(new Listing(
+            const data = await listing.addListing(new Listing(
                 uniqid(),
                 name,
                 askingPrice,
@@ -268,13 +268,51 @@ router.post(
     }
 );
 
+router.put(
+    '/listing/:listingCode/update',
+    [authMiddleware,userCodeVerifier],
+    async (req,res) => {
+        try{
+
+            const {
+                name,
+                askingPrice,
+                listingCondition,
+                description,
+                categoryCode
+            } = req.body;
+
+            const listing = new Listing();
+
+            const data = await listing.updateListing(new Listing(
+                req.params.listingCode,
+                name,
+                askingPrice,
+                null,
+                listingCondition,
+                description,
+                categoryCode,
+                null,
+                null,
+                null
+            ));
+
+            res.send(data);
+
+        }
+        catch (err) {
+            res.status(err.statusCode).send(err);
+        }
+    }
+);
+
 router.patch(
     '/listing/:listingCode/set-active',
     [authMiddleware, userCodeVerifier],
     async (req, res) => {
         try {
             const listing = new Listing();
-            const data = await listing.activate(req.params.listingCode);
+            const data = await listing.makeActiveListing(req.params.listingCode);
 
             res.send(data);
         } catch (err) {
@@ -289,7 +327,7 @@ router.patch(
     async (req, res) => {
         try {
             const listing = new Listing();
-            const data = await listing.passive(req.params.listingCode);
+            const data = await listing.makePassiveListing(req.params.listingCode);
 
             res.send(data);
         } catch (err) {
@@ -297,14 +335,6 @@ router.patch(
         }
     }
 );
-
-
-
-
-
-
-
-
 
 
 
@@ -354,7 +384,7 @@ router.post(
                 manufacturerId,
                 supplierId
             );
-            const data = await listing.add(listing);
+            const data = await listing.addListing(listing);
 
             res.send(data);
         } catch (err) {
