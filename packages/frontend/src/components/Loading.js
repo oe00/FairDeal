@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimmer, Loader, Segment, Grid} from "semantic-ui-react";
+import {Dimmer, Grid, Loader, Segment} from "semantic-ui-react";
 
 const Loading = props => {
 

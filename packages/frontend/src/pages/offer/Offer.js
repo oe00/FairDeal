@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {withRouter} from 'react-router-dom';
-import {Button, Container, Header, Icon, Message, Modal, Segment, Tab, Table} from "semantic-ui-react";
+import {Button, Container, Icon, Message, Modal, Tab, Table} from "semantic-ui-react";
 import jwt from "jsonwebtoken";
 import config from "../../config";
 import axios from "axios";
@@ -317,10 +317,7 @@ const Offer = () => {
 
 
     return (
-        <Segment>
-            <Header size="huge">Offers</Header>
-            <Tab menu={{attached: false, widths: 2}} panes={panes}/>
-        </Segment>
+        <Tab menu={{attached: false, widths: 2}} panes={panes}/>
     );
 };
 

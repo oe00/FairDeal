@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import config from '../../../config';
-import {Button, Card, Divider, Form, Icon, Image, Message, Modal, Segment} from "semantic-ui-react";
+import {Button, Card, Divider, Form, Icon, Message} from "semantic-ui-react";
 import jwt from "jsonwebtoken";
 
 const NewListingForm = props => {

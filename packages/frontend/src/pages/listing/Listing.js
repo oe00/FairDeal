@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {withRouter} from 'react-router-dom';
-import {Container, Header, Icon, Message, Segment, Tab} from "semantic-ui-react";
+import {Container, Icon, Message, Tab} from "semantic-ui-react";
 import jwt from "jsonwebtoken";
 import config from "../../config";
 import axios from "axios";
@@ -142,10 +142,7 @@ const Listing = props => {
     ];
 
     return (
-        <Segment>
-            <Header size="huge">Listings</Header>
             <Tab menu={{attached: false, widths: 2}} panes={panes}/>
-        </Segment>
     );
 };
 

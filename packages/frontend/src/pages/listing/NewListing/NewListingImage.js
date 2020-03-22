@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import config from '../../../config';
-import {Button, Card, Divider, Form, Header, Icon, Image, Message, Modal, Segment} from "semantic-ui-react";
+import {Button, Card, Divider, Header, Icon, Image, Message, Modal, Segment} from "semantic-ui-react";
 import jwt from "jsonwebtoken";
 
 const NewListingImage = props => {

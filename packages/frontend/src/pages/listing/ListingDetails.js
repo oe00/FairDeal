@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
-import {Button, Grid, Header, Icon, Message, Tab} from "semantic-ui-react";
+import {Button, Grid, Header, Tab} from "semantic-ui-react";
 import axios from "axios";
 import config from "../../config";
 import Loading from "../../components/Loading";

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {withRouter} from 'react-router-dom';
-import {Grid, Header, Icon, Message, Segment, Step} from "semantic-ui-react";
-import NewListingView from "./NewListingView";
+import {Grid, Icon, Message, Step} from "semantic-ui-react";
 import NewListingForm from "./NewListingForm";
 import jwt from "jsonwebtoken";
 import config from "../../../config";
@@ -19,7 +18,6 @@ const NewListing = props => {
     const [newListingCode, setNewListingCode] = useState(null);
 
     return (
-        <Segment>
             <Grid>
                 {listingCompleted ?
                     <Grid.Column>
@@ -33,7 +31,6 @@ const NewListing = props => {
                         <BrowseListingDetails passed_listing_code={newListingCode}/>
                     </Grid.Column>
                     : <Grid.Column width={16}>
-                        <Header size="huge">New Listing</Header>
                         <Step.Group fluid>
                             <Step active={step === 0}>
                                 <Icon name="info"/>
@@ -59,7 +56,6 @@ const NewListing = props => {
                     </Grid.Column>
                 }
             </Grid>
-        </Segment>
     );
 };
 
