@@ -54,7 +54,7 @@ const BrowseListingAccountCard = props => {
                     </Modal.Content>
                 </Modal>
                 : <Card>
-                    <Image src={`${config.apiDomain}/image/account/${listingOwner.code}`}/>
+                    <Image src={`${config.apiDomain}/account/${listingOwner.code}/get-image`}/>
                     <Segment.Group>
                         <Segment>
                             <h3>{listingOwner.name}</h3>

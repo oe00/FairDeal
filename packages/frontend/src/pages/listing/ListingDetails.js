@@ -31,7 +31,7 @@ const ListingDetails = props => {
 
     async function makeListingPassive(){
         try {
-            const res = await axios({
+            await axios({
                 method: 'patch',
                 url: `${config.apiDomain}/listing/${listing.listing_data.code}/set-passive`,
                 headers: {
@@ -39,7 +39,6 @@ const ListingDetails = props => {
                     authorization: localStorage.getItem(config.accessTokenKey),
                 }
             });
-
             window.location.reload();
 
         } catch (e) {
@@ -49,7 +48,7 @@ const ListingDetails = props => {
 
     async function makeListingActive(){
         try {
-            const res = await axios({
+            await axios({
                 method: 'patch',
                 url: `${config.apiDomain}/listing/${listing.listing_data.code}/set-active`,
                 headers: {
@@ -57,7 +56,6 @@ const ListingDetails = props => {
                     authorization: localStorage.getItem(config.accessTokenKey),
                 }
             });
-
             window.location.reload();
 
         } catch (e) {

@@ -27,22 +27,32 @@ const Offer = () => {
     useEffect(() => {
         async function fetchReceivedOffers() {
             try {
-                const res = await axios({
+                const swap_res = await axios({
                     method: 'get',
-                    url: `${config.apiDomain}/offer/received/account/${code}`,
+                    url: `${config.apiDomain}/offer/received-swap/account/${code}`,
                     headers: {
                         authorization: localStorage.getItem(config.accessTokenKey),
                     }
                 });
-                const data = res.data;
 
-                if (!data.moneyOffer) {
+                const money_res = await axios({
+                    method: 'get',
+                    url: `${config.apiDomain}/offer/received-money/account/${code}`,
+                    headers: {
+                        authorization: localStorage.getItem(config.accessTokenKey),
+                    }
+                });
+
+                const moneyOffer = money_res.data;
+                const swapOffer = swap_res.data;
+
+                if (!moneyOffer) {
                     setEmptyReceivedMoneyOffers(true);
                 }
-                if (!data.swapOffer) {
+                if (!swapOffer) {
                     setEmptyReceivedSwapOffers(true);
                 }
-                setReceivedOffers(data);
+                setReceivedOffers({moneyOffer,swapOffer});
             } catch (e) {
 
                 setErrorReceivedOffers(true);
@@ -56,22 +66,32 @@ const Offer = () => {
 
         async function fetchSentOffers() {
             try {
-                const res = await axios({
+                const swap_res = await axios({
                     method: 'get',
-                    url: `${config.apiDomain}/offer/sent/account/${code}`,
+                    url: `${config.apiDomain}/offer/sent-swap/account/${code}`,
                     headers: {
                         authorization: localStorage.getItem(config.accessTokenKey),
                     }
                 });
-                const data = res.data;
 
-                if (!data.moneyOffer) {
+                const money_res = await axios({
+                    method: 'get',
+                    url: `${config.apiDomain}/offer/sent-money/account/${code}`,
+                    headers: {
+                        authorization: localStorage.getItem(config.accessTokenKey),
+                    }
+                });
+
+                const moneyOffer = money_res.data;
+                const swapOffer = swap_res.data;
+
+                if (!moneyOffer) {
                     setEmptySentMoneyOffers(true);
                 }
-                if (!data.swapOffer) {
+                if (!swapOffer) {
                     setEmptySentSwapOffers(true);
                 }
-                setSentOffers(data);
+                setSentOffers({moneyOffer,swapOffer});
             } catch (e) {
 
                 setErrorSentOffers(true);
