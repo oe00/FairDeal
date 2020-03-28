@@ -15,29 +15,15 @@ const {
 const {UnauthorisedError} = require('../exceptions');
 
 router.get(
-    '/offer/sent-money/account/:code/',
+    '/offer/sent/account/:code/',
     [authMiddleware, userCodeVerifier],
     async (req, res) => {
         try {
             const offer = new Offer();
             let moneyOffer = await offer.getSentMoneyOffers(req.params.code, req.query.page || 1, req.query.size || 20);
-
-            res.send(moneyOffer);
-        } catch (err) {
-            res.status(err.statusCode).send(err);
-        }
-    }
-);
-
-router.get(
-    '/offer/sent-swap/account/:code/',
-    [authMiddleware, userCodeVerifier],
-    async (req, res) => {
-        try {
-            const offer = new Offer();
             let swapOffer = await offer.getSentSwapOffers(req.params.code, req.query.page || 1, req.query.size || 20);
 
-            res.send(swapOffer);
+            res.send({moneyOffer,swapOffer});
         } catch (err) {
             res.status(err.statusCode).send(err);
         }
@@ -45,14 +31,15 @@ router.get(
 );
 
 router.get(
-    '/offer/received-money/account/:code/',
+    '/offer/received/account/:code/',
     [authMiddleware, userCodeVerifier],
     async (req, res) => {
         try {
             const offer = new Offer();
             let moneyOffer = await offer.getReceivedMoneyOffers(req.params.code, req.query.page || 1, req.query.size || 20);
+            let swapOffer = await offer.getReceivedSwapOffers(req.params.code, req.query.page || 1, req.query.size || 20);
 
-            res.send(moneyOffer);
+            res.send({moneyOffer,swapOffer});
         } catch (err) {
             res.status(err.statusCode).send(err);
         }
@@ -60,14 +47,52 @@ router.get(
 );
 
 router.get(
-    '/offer/received-swap/account/:code/',
-    [authMiddleware, userCodeVerifier],
+    '/offer/:offerCode/account/:code/',
+    [authMiddleware,userCodeVerifier],
     async (req, res) => {
         try {
             const offer = new Offer();
-            let swapOffer = await offer.getReceivedSwapOffers(req.params.code, req.query.page || 1, req.query.size || 20);
+            const data = await offer.get(req.params.code);
 
-            res.send(swapOffer);
+            if (data.toUser !== req.params.code && data.fromUser !== req.params.code) {
+                throw new UnauthorisedError('User is not part of the offer.');
+            }
+            res.send(data);
+        } catch (err) {
+            res.status(err.statusCode).send(err);
+        }
+    }
+);
+
+router.put(
+    '/stores/:storeId/offers/:offerId',
+    [authMiddleware],
+    async (req, res) => {
+        try {
+            const {
+                paidOn,
+                customerName,
+                shippingAddress,
+                billingAddress,
+                customerContact,
+                products,
+            } = req.body;
+
+            const offer = new Offer(
+                req.params.offerId,
+                req.params.storeId,
+                null,
+                res.locals.auth.accountId,
+                paidOn,
+                customerName,
+                shippingAddress,
+                billingAddress,
+                customerContact,
+                products
+            );
+            const data = await offer.update(offer);
+
+            res.send(data);
         } catch (err) {
             res.status(err.statusCode).send(err);
         }
@@ -93,6 +118,7 @@ router.post(
                 toListing,
                 toUser,
                 fromUser,
+                offerType,
                 swapListing,
                 amount,
                 "Pending",
@@ -100,7 +126,7 @@ router.post(
                 moment.utc().format('YYYY-MM-DD HH:mm:ss'),
             );
 
-            const data = !offerType ? await offer.addMoneyOffer(offer) : await offer.addSwapOffer(offer);
+            const data = await offer.add(offer);
 
             res.send(data);
         } catch (err) {
@@ -110,7 +136,7 @@ router.post(
 );
 
 router.delete(
-    '/offer/delete/:offerId',
+    '/stores/:storeId/offers/:offerId',
     [authMiddleware],
     async (req, res) => {
         try {
