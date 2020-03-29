@@ -13,18 +13,14 @@ const db = new MySQL(dbHost, dbUser, dbPassword, dbName);
 
 function Category(
     code,
-    parentCode,
     name,
     color,
-    addedBy,
     status,
     dbConn
 ) {
     this.code = code;
-    this.parentCode = parentCode;
     this.name = name;
     this.color = color;
-    this.addedBy = addedBy;
     this.status = status;
 
     this.status = status;
@@ -36,14 +32,14 @@ function Category(
 Category.prototype.get = function (code) {
     return new Promise((resolve, reject) => {
         (this.db || db).query(
-            `select code, parentCode, name, color from category where code='${code}'`,
+            `select code, name, color from category where code='${code}'`,
             (error, results) => {
                 if (error) {
                     reject(new NoRecordFoundError('No category found.'));
                 } else {
-                    const {code, parentCode, name, color, status} = results[0];
+                    const {code, name, color, status} = results[0];
                     resolve(
-                        new Category(code, parentCode, name, color, "","")
+                        new Category(code, name, color,status)
                     );
                 }
             }

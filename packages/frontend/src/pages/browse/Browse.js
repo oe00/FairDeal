@@ -8,11 +8,9 @@ import {Card, Grid} from "semantic-ui-react";
 import SideBar from "../../components/SideBar";
 import Loading from "../../components/Loading";
 
-const Browse = props => {
+const Browse = () => {
 
     const [listings, setListings] = useState(null);
-
-    const {auth,setAuth} = props;
 
     useEffect(() => {
         async function fetchBrowseListings() {
@@ -22,6 +20,7 @@ const Browse = props => {
                     url: `${config.apiDomain}/listing/browse`,
                 });
                 const data = res.data;
+
                 setListings(data);
             } catch (e) {
                 //TODO: error handling here

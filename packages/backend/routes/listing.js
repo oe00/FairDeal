@@ -124,6 +124,7 @@ router.get(
     '/listing/browse',
     async (req, res) => {
         try {
+
             const listing = new Listing();
             const category = new Category();
 

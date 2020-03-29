@@ -64,40 +64,6 @@ router.get(
     }
 );
 
-router.put(
-    '/stores/:storeId/offers/:offerId',
-    [authMiddleware],
-    async (req, res) => {
-        try {
-            const {
-                paidOn,
-                customerName,
-                shippingAddress,
-                billingAddress,
-                customerContact,
-                products,
-            } = req.body;
-
-            const offer = new Offer(
-                req.params.offerId,
-                req.params.storeId,
-                null,
-                res.locals.auth.accountId,
-                paidOn,
-                customerName,
-                shippingAddress,
-                billingAddress,
-                customerContact,
-                products
-            );
-            const data = await offer.update(offer);
-
-            res.send(data);
-        } catch (err) {
-            res.status(err.statusCode).send(err);
-        }
-    }
-);
 
 router.post(
     '/offer/makeOffer',
@@ -109,7 +75,7 @@ router.post(
                 toUser,
                 fromUser,
                 offerType,
-                swapListing,
+                proposedListing,
                 amount,
             } = req.body;
 
@@ -119,7 +85,7 @@ router.post(
                 toUser,
                 fromUser,
                 offerType,
-                swapListing,
+                proposedListing,
                 amount,
                 "Pending",
                 "",

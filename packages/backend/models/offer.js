@@ -20,7 +20,7 @@ function Offer(
     toUser,
     fromUser,
     offerType,
-    swapListing,
+    proposedListing,
     amount,
     status,
     comment,
@@ -33,7 +33,7 @@ function Offer(
     this.toUser = toUser;
     this.fromUser = fromUser;
     this.offerType = offerType;
-    this.swapListing = swapListing;
+    this.proposedListing = proposedListing;
     this.amount = amount;
     this.comment = comment;
     this.status = status;
@@ -46,6 +46,8 @@ function Offer(
 Offer.prototype.add = function (offer) {
     return new Promise((resolve, reject) => {
         let proceed = true;
+
+
 
         if (offer instanceof Offer) {
             Object.keys(offer).forEach(function (key, index) {
@@ -69,16 +71,20 @@ Offer.prototype.add = function (offer) {
                 toUser,
                 fromUser,
                 offerType,
-                swapListing,
+                proposedListing,
                 amount,
                 status,
                 comment,
                 addedOn,
             } = offer;
 
+            console.log({offer})
+
+            let addedProposedListing = proposedListing ? `'${proposedListing}'` : proposedListing;
+
             (this.db || db).query(
-                `insert into offer (code, toListing, toUser, fromUser, offerType, swapListing, amount, status, comment, addedOn) 
-         values('${code}', '${toListing}', '${toUser}', '${fromUser}', '${offerType}' , '${swapListing}', '${amount}', '${status}', '${comment}', '${addedOn}')`,
+                `insert into offer (code, toListing, toUser, fromUser, offerType, proposedListing, amount, status, comment, addedOn) 
+         values('${code}', '${toListing}', '${toUser}', '${fromUser}', '${offerType}' , ${addedProposedListing}, '${amount}', '${status}', '${comment}', '${addedOn}')`,
                 (error, results) => {
                     if (error || results.affectedRows == 0) {
                         reject(new BadRequestError('Invalid offer data.'));
@@ -197,7 +203,7 @@ Offer.prototype.getReceivedMoneyOffers = function (code, page = 1, pageSize = 20
                             toUser,
                             fromUser,
                             offerType,
-                            swapListing,
+                            proposedListing,
                             amount,
                             status,
                             comment,
@@ -209,7 +215,7 @@ Offer.prototype.getReceivedMoneyOffers = function (code, page = 1, pageSize = 20
                             toUser,
                             fromUser,
                             offerType,
-                            swapListing,
+                            proposedListing,
                             amount,
                             status,
                             comment,
@@ -245,7 +251,7 @@ Offer.prototype.getReceivedSwapOffers = function (code, page = 1, pageSize = 20)
                             toUser,
                             fromUser,
                             offerType,
-                            swapListing,
+                            proposedListing,
                             amount,
                             status,
                             comment,
@@ -257,7 +263,7 @@ Offer.prototype.getReceivedSwapOffers = function (code, page = 1, pageSize = 20)
                             toUser,
                             fromUser,
                             offerType,
-                            swapListing,
+                            proposedListing,
                             amount,
                             status,
                             comment,
@@ -293,7 +299,7 @@ Offer.prototype.getSentMoneyOffers = function (code, page = 1, pageSize = 20) {
                             toUser,
                             fromUser,
                             offerType,
-                            swapListing,
+                            proposedListing,
                             amount,
                             status,
                             comment,
@@ -305,7 +311,7 @@ Offer.prototype.getSentMoneyOffers = function (code, page = 1, pageSize = 20) {
                             toUser,
                             fromUser,
                             offerType,
-                            swapListing,
+                            proposedListing,
                             amount,
                             status,
                             comment,
@@ -341,7 +347,7 @@ Offer.prototype.getSentSwapOffers = function (code, page = 1, pageSize = 20) {
                             toUser,
                             fromUser,
                             offerType,
-                            swapListing,
+                            proposedListing,
                             amount,
                             status,
                             comment,
@@ -353,7 +359,7 @@ Offer.prototype.getSentSwapOffers = function (code, page = 1, pageSize = 20) {
                             toUser,
                             fromUser,
                             offerType,
-                            swapListing,
+                            proposedListing,
                             amount,
                             status,
                             comment,

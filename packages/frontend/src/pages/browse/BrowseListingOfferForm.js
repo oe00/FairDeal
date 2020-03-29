@@ -45,7 +45,7 @@ const BrowseListingOfferForm = props => {
                     toUser: listing.addedBy,
                     fromUser: code,
                     offerType: offerType,
-                    swapListing: offerType === 0 ? null : value2.value,
+                    proposedListing: offerType === 0 ? null : value2.value,
                     amount: offerType === 0 ? value1 : value3,
                 },
                 headers: {
@@ -135,9 +135,9 @@ const BrowseListingOfferForm = props => {
         {
             key: 1,
             text: 'Mobile',
-            value: 98765,
+            value: 'sq1ivbywk89ez3ka',
             content: (
-                <Header icon='mobile' content='Mobile' subheader='The smallest size'/>
+                <Header icon='mobile' content='sq1ivbywk89ez3ka' subheader='The smallest size'/>
             ),
         },
         {

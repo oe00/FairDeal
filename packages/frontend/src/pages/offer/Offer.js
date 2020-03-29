@@ -196,7 +196,7 @@ const Offer = () => {
                                                 </Modal>
                                             </Table.Cell>
                                             <Table.Cell>{offer.toUser}</Table.Cell>
-                                            <Table.Cell>{offer.swapListing}</Table.Cell>
+                                            <Table.Cell>{offer.proposedListing}</Table.Cell>
                                             <Table.Cell>{offer.amount}</Table.Cell>
                                             <Table.Cell>{offer.addedOn}</Table.Cell>
                                             <Table.Cell positive><Icon name='check'/>{offer.status}</Table.Cell>
@@ -295,7 +295,7 @@ const Offer = () => {
                                                 </Modal>
                                             </Table.Cell>
                                             <Table.Cell>{offer.toUser}</Table.Cell>
-                                            <Table.Cell>{offer.swapListing}</Table.Cell>
+                                            <Table.Cell>{offer.proposedListing}</Table.Cell>
                                             <Table.Cell>{offer.amount}</Table.Cell>
                                             <Table.Cell>{offer.addedOn}</Table.Cell>
                                             <Table.Cell positive><Icon name='check'/>{offer.status}</Table.Cell>
